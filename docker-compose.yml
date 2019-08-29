@@ -56,6 +56,22 @@ services:
     ports:
       - 7878:7878
     restart: unless-stopped
+  sonarr:
+    image: ${SONARR_IMAGE}
+    container_name: ${SONARR_NAME}
+    network_mode: host
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK_SET=022 #optional
+    volumes:
+      - ${SONARR_CONFIG_DIR}:/config
+      - ${SHARED_MEDIA_DIR}/TV Shows:/tv
+      - ${SHARED_DOWNLOADS_DIR}/complete:/downloads
+    ports:
+      - 8989:8989
+    restart: unless-stopped
   transmission:
     image: ${TRANSMISSION_IMAGE}
     container_name: ${TRANSMISSION_NAME}
