@@ -1,0 +1,76 @@
+version: "2"
+services:
+  filebot-watcher:
+    image: ${FILEBOT_WATCHER_IMAGE}
+    container_name: ${FILEBOT_WATCHER_NAME}
+    volumes:
+      - ${FILEBOT_DATA_DIR}:/data
+      - ${SHARED_DOWNLOADS_DIR}/complete:/volume1
+      - ${SHARED_MEDIA_DIR}:/volume2
+    command: /volume1 --output /volume2 --action duplicate --conflict skip -non-strict --log-file ${FILEBOT_LOG_FILE} --def unsorted=y music=n artwork=n deleteAfterExtract=y excludeList=${FILEBOT_EXCLUDE_FILE} plex=${SERVER_ADDRESS}:${PLEX_AUTH_TOKEN}
+    restart: unless-stopped
+  jackett:
+    image: ${JACKETT_IMAGE}
+    container_name: ${JACKETT_NAME}
+    network_mode: host
+    environment:
+      - PUID=${PUID}
+      - PGID=${PUID}
+      - TZ=${TZ}
+      - RUN_OPTS=run options here #optional
+    volumes:
+      - ${JACKETT_CONFIG_DIR}:/config
+      # - path to blackhole:/downloads
+    ports:
+      - 9117:9117
+    restart: unless-stopped
+  plex:
+    image: ${PLEX_IMAGE}
+    container_name: ${PLEX_NAME}
+    network_mode: host
+    environment:
+      - PUID=${PUID}
+      - PGID=${PUID}
+      - VERSION=docker
+      - PLEX_CLAIM=${PLEX_CLAIM}
+      - TZ=${TZ}
+    volumes:
+      - ${PLEX_CONFIG_DIR}:/config
+      - ${PLEX_TRANSCODE_DIR}:/transcode
+      - ${SHARED_MEDIA_DIR}:/data
+    restart: unless-stopped
+  radarr:
+    image: ${RADARR_IMAGE}
+    container_name: ${RADARR_NAME}
+    network_mode: host
+    environment:
+      - PUID=${PUID}
+      - PGID=${PUID}
+      - TZ=${TZ}
+      - UMASK_SET=022 #optional
+    volumes:
+      - ${RADARR_CONFIG_DIR}:/config
+      - ${SHARED_MEDIA_DIR}/Movies:/movies
+      - ${SHARED_DOWNLOADS_DIR}/complete:/downloads
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+  transmission:
+    image: ${TRANSMISSION_IMAGE}
+    container_name: ${TRANSMISSION_NAME}
+    network_mode: host
+    environment:
+      - PUID=${PUID}
+      - PGID=${PUID}
+      - TZ=${TZ}
+      - TRANSMISSION_WEB_HOME=/transmission-web-control/ #optional
+      - TRANSMISSION_WATCH_DIR_FORCE_GENERIC=true
+    volumes:
+      - ${TRANSMISSION_CONFIG_DIR}:/config
+      - ${TRANSMISSION_WATCH_DIR}:/watch
+      - ${SHARED_DOWNLOADS_DIR}:/downloads
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
