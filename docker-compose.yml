@@ -3,6 +3,7 @@ services:
   filebot-watcher:
     image: ${FILEBOT_WATCHER_IMAGE}
     container_name: ${FILEBOT_WATCHER_NAME}
+    network_mode: host
     volumes:
       - ${FILEBOT_DATA_DIR}:/data
       - ${SHARED_DOWNLOADS_DIR}/complete:/volume1
