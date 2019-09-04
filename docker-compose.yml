@@ -1,15 +1,15 @@
 version: "2"
 services:
-  filebot-watcher:
-    image: ${FILEBOT_WATCHER_IMAGE}
-    container_name: ${FILEBOT_WATCHER_NAME}
-    network_mode: host
-    volumes:
-      - ${FILEBOT_DATA_DIR}:/data
-      - ${SHARED_DOWNLOADS_DIR}/complete:/volume1
-      - ${SHARED_MEDIA_DIR}:/volume2
-    command: /volume1 --output /volume2 --action duplicate --conflict skip -non-strict --log-file ${FILEBOT_LOG_FILE} --def unsorted=y music=n artwork=n deleteAfterExtract=y excludeList=${FILEBOT_EXCLUDE_FILE} plex=${SERVER_ADDRESS}:${PLEX_AUTH_TOKEN}
-    restart: unless-stopped
+  # filebot-watcher:
+  #   image: ${FILEBOT_WATCHER_IMAGE}
+  #   container_name: ${FILEBOT_WATCHER_NAME}
+  #   network_mode: host
+  #   volumes:
+  #     - ${FILEBOT_DATA_DIR}:/data
+  #     - ${SHARED_DOWNLOADS_DIR}/complete:/volume1
+  #     - ${SHARED_MEDIA_DIR}:/volume2
+  #   command: /volume1 --output /volume2 --action duplicate --conflict skip -non-strict --log-file ${FILEBOT_LOG_FILE} --def unsorted=y music=n artwork=n deleteAfterExtract=y excludeList=${FILEBOT_EXCLUDE_FILE} plex=${SERVER_ADDRESS}:${PLEX_AUTH_TOKEN}
+  #   restart: unless-stopped
   jackett:
     image: ${JACKETT_IMAGE}
     container_name: ${JACKETT_NAME}
@@ -52,7 +52,7 @@ services:
     volumes:
       - ${RADARR_CONFIG_DIR}:/config
       - ${SHARED_MEDIA_DIR}/Movies:/movies
-      - ${SHARED_DOWNLOADS_DIR}/complete:/downloads
+      - ${SHARED_DOWNLOADS_DIR}:/downloads
     ports:
       - 7878:7878
     restart: unless-stopped
@@ -68,7 +68,7 @@ services:
     volumes:
       - ${SONARR_CONFIG_DIR}:/config
       - ${SHARED_MEDIA_DIR}/TV Shows:/tv
-      - ${SHARED_DOWNLOADS_DIR}/complete:/downloads
+      - ${SHARED_DOWNLOADS_DIR}:/downloads
     ports:
       - 8989:8989
     restart: unless-stopped
