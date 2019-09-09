@@ -2,7 +2,7 @@ version: "2"
 services:
   # filebot-watcher:
   #   image: ${FILEBOT_WATCHER_IMAGE}
-  #   container_name: ${FILEBOT_WATCHER_NAME}
+  #   container_name: ${FILEBOT_WATCHER_CONTAINER_NAME}
   #   network_mode: host
   #   volumes:
   #     - ${FILEBOT_DATA_DIR}:/data
@@ -10,9 +10,23 @@ services:
   #     - ${SHARED_MEDIA_DIR}:/volume2
   #   command: /volume1 --output /volume2 --action duplicate --conflict skip -non-strict --log-file ${FILEBOT_LOG_FILE} --def unsorted=y music=n artwork=n deleteAfterExtract=y excludeList=${FILEBOT_EXCLUDE_FILE} plex=${SERVER_ADDRESS}:${PLEX_AUTH_TOKEN}
   #   restart: unless-stopped
+  heimdall:
+    image: ${HEIMDALL_IMAGE}
+    container_name: ${HEIMDALL_CONTAINER_NAME}
+    network_mode: host
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${HEIMDALL_CONFIG_DIR}:/config
+    ports:
+      - 80:80
+      - 443:443
+    restart: unless-stopped
   jackett:
     image: ${JACKETT_IMAGE}
-    container_name: ${JACKETT_NAME}
+    container_name: ${JACKETT_CONTAINER_NAME}
     network_mode: host
     environment:
       - PUID=${PUID}
@@ -27,7 +41,7 @@ services:
     restart: unless-stopped
   plex:
     image: ${PLEX_IMAGE}
-    container_name: ${PLEX_NAME}
+    container_name: ${PLEX_CONTAINER_NAME}
     network_mode: host
     environment:
       - PUID=${PUID}
@@ -42,7 +56,7 @@ services:
     restart: unless-stopped
   radarr:
     image: ${RADARR_IMAGE}
-    container_name: ${RADARR_NAME}
+    container_name: ${RADARR_CONTAINER_NAME}
     network_mode: host
     environment:
       - PUID=${PUID}
@@ -58,7 +72,7 @@ services:
     restart: unless-stopped
   sonarr:
     image: ${SONARR_IMAGE}
-    container_name: ${SONARR_NAME}
+    container_name: ${SONARR_CONTAINER_NAME}
     network_mode: host
     environment:
       - PUID=${PUID}
@@ -74,7 +88,7 @@ services:
     restart: unless-stopped
   transmission:
     image: ${TRANSMISSION_IMAGE}
-    container_name: ${TRANSMISSION_NAME}
+    container_name: ${TRANSMISSION_CONTAINER_NAME}
     network_mode: host
     environment:
       - PUID=${PUID}
