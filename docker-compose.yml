@@ -1,5 +1,20 @@
 version: "2"
 services:
+  bazarr:
+    image: ${BAZARR_IMAGE}
+    container_name: ${BAZARR_CONTAINER_NAME}
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK_SET=022 #optional
+    volumes:
+      - ${BAZARR_CONFIG_DIR}:/config
+      - ${SHARED_MOVIES_DIR}:/movies
+      - ${SHARED_TV_DIR}:/tv
+    ports:
+      - 6767:6767
+    restart: unless-stopped
   # filebot-watcher:
   #   image: ${FILEBOT_WATCHER_IMAGE}
   #   container_name: ${FILEBOT_WATCHER_CONTAINER_NAME}
@@ -65,7 +80,7 @@ services:
       - UMASK_SET=022 #optional
     volumes:
       - ${RADARR_CONFIG_DIR}:/config
-      - ${SHARED_MEDIA_DIR}/Movies:/movies
+      - ${SHARED_MOVIES_DIR}:/movies
       - ${SHARED_DOWNLOADS_DIR}:/downloads
     ports:
       - 7878:7878
@@ -81,7 +96,7 @@ services:
       - UMASK_SET=022 #optional
     volumes:
       - ${SONARR_CONFIG_DIR}:/config
-      - ${SHARED_MEDIA_DIR}/TV Shows:/tv
+      - ${SHARED_TV_DIR}:/tv
       - ${SHARED_DOWNLOADS_DIR}:/downloads
     ports:
       - 8989:8989
