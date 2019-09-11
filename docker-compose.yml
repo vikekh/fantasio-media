@@ -115,6 +115,7 @@ services:
       - ${TRANSMISSION_CONFIG_DIR}:/config
       - ${TRANSMISSION_WATCH_DIR}:/watch
       - ${SHARED_DOWNLOADS_DIR}:/downloads
+      - ${PRIVATE_DOWNLOADS_DIR}:/downloads2
     ports:
       - 9091:9091
       - 51413:51413
