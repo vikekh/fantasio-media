@@ -15,16 +15,6 @@ services:
     ports:
       - 6767:6767
     restart: unless-stopped
-  # filebot-watcher:
-  #   image: ${FILEBOT_WATCHER_IMAGE}
-  #   container_name: ${FILEBOT_WATCHER_CONTAINER_NAME}
-  #   network_mode: host
-  #   volumes:
-  #     - ${FILEBOT_DATA_DIR}:/data
-  #     - ${SHARED_DOWNLOADS_DIR}/complete:/volume1
-  #     - ${SHARED_MEDIA_DIR}:/volume2
-  #   command: /volume1 --output /volume2 --action duplicate --conflict skip -non-strict --log-file ${FILEBOT_LOG_FILE} --def unsorted=y music=n artwork=n deleteAfterExtract=y excludeList=${FILEBOT_EXCLUDE_FILE} plex=${SERVER_ADDRESS}:${PLEX_AUTH_TOKEN}
-  #   restart: unless-stopped
   heimdall:
     image: ${HEIMDALL_IMAGE}
     container_name: ${HEIMDALL_CONTAINER_NAME}
@@ -115,7 +105,6 @@ services:
       - ${TRANSMISSION_CONFIG_DIR}:/config
       - ${TRANSMISSION_WATCH_DIR}:/watch
       - ${SHARED_DOWNLOADS_DIR}:/downloads
-      - ${PRIVATE_DOWNLOADS_DIR}:/downloads2
     ports:
       - 9091:9091
       - 51413:51413
