@@ -44,6 +44,19 @@ services:
     ports:
       - 9117:9117
     restart: unless-stopped
+  ombi:
+    image: ${OMBI_IMAGE}
+    container_name: ${OMBI_CONTAINER_NAME}
+    environment:
+      - PUID=${PUID}
+      - PGID=${PUID}
+      - TZ=${TZ}
+      - BASE_URL=/ombi #optional
+    volumes:
+      - ${OMBI_CONFIG_DIR}:/config
+    ports:
+      - 3579:3579
+    restart: unless-stopped
   plex:
     image: ${PLEX_IMAGE}
     container_name: ${PLEX_CONTAINER_NAME}
