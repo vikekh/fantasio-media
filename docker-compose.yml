@@ -10,7 +10,7 @@ services:
       - TZ=${TZ}
       - UMASK_SET=022 #optional
     volumes:
-      - ./.bazarr/config:/config
+      - ~/.bazarr/config:/config
       - ${DOWNLOADS_DIR}:/movies
       - ${PLEX_TV_DIR}:/tv
     ports:
@@ -25,7 +25,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ./.heimdall/config:/config
+      - ~/.heimdall/config:/config
     ports:
       - 80:80
       - 443:443
@@ -40,7 +40,7 @@ services:
       - TZ=${TZ}
       - RUN_OPTS=run options here #optional
     volumes:
-      - ./.jackett/config:/config
+      - ~/.jackett/config:/config
       # - path to blackhole:/downloads
     ports:
       - 9117:9117
@@ -55,7 +55,7 @@ services:
       - TZ=${TZ}
       - BASE_URL=/ombi #optional
     volumes:
-      - ./.ombi/config:/config
+      - ~/.ombi/config:/config
     ports:
       - 3579:3579
     restart: unless-stopped
@@ -70,9 +70,9 @@ services:
       - PLEX_CLAIM=${PLEX_CLAIM}
       - TZ=${TZ}
     volumes:
-      - ./.plex/config:/config
+      - ~/.plex/config:/config
       - ${PLEX_DIR}:/data
-      - ./.plex/transcode:/transcode
+      - ~/.plex/transcode:/transcode
     restart: unless-stopped
   radarr:
     image: linuxserver/radarr
@@ -84,7 +84,7 @@ services:
       - TZ=${TZ}
       - UMASK_SET=022 #optional
     volumes:
-      - ./.radarr/config:/config
+      - ~/.radarr/config:/config
       - ${DOWNLOADS_DIR}:/downloads
       - ${PLEX_MOVIES_DIR}:/movies
     ports:
@@ -100,7 +100,7 @@ services:
       - TZ=${TZ}
       - UMASK_SET=022 #optional
     volumes:
-      - ./.sonarr/config:/config
+      - ~/.sonarr/config:/config
       - ${DOWNLOADS_DIR}:/downloads
       - ${PLEX_TV_DIR}:/tv
     ports:
@@ -117,9 +117,9 @@ services:
       - TRANSMISSION_WEB_HOME=/transmission-web-control/ #optional
       - TRANSMISSION_WATCH_DIR_FORCE_GENERIC=true
     volumes:
-      - ./.transmission/config:/config
+      - ~/.transmission/config:/config
       - ${DOWNLOADS_DIR}:/downloads
-      - ./.transmission/watch:/watch
+      - ~/.transmission/watch:/watch
     ports:
       - 9091:9091
       - 51413:51413
