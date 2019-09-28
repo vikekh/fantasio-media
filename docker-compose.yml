@@ -91,7 +91,7 @@ services:
       - 7878:7878
     restart: unless-stopped
   sonarr:
-    image: linuxserver/sonarr
+    image: linuxserver/sonarr:preview
     container_name: sonarr
     network_mode: host
     environment:
