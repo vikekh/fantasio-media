@@ -11,7 +11,7 @@ services:
       - UMASK_SET=022 #optional
     volumes:
       - ~/.bazarr/config:/config
-      - ${DOWNLOADS_DIR}:/movies
+      - ${PLEX_MOVIES_DIR}:/movies
       - ${PLEX_TV_DIR}:/tv
     ports:
       - 6767:6767
