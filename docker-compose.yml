@@ -36,7 +36,7 @@ services:
     network_mode: host
     environment:
       - PUID=${PUID}
-      - PGID=${PUID}
+      - PGID=${PGID}
       - TZ=${TZ}
       - RUN_OPTS=run options here #optional
     volumes:
@@ -51,7 +51,7 @@ services:
     network_mode: host
     environment:
       - PUID=${PUID}
-      - PGID=${PUID}
+      - PGID=${PGID}
       - TZ=${TZ}
       - BASE_URL=/ombi #optional
     volumes:
@@ -59,13 +59,30 @@ services:
     ports:
       - 3579:3579
     restart: unless-stopped
+  openvpn-as:
+    image: linuxserver/openvpn-as
+    container_name: openvpn-as
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - INTERFACE=eth0 #optional
+    volumes:
+      - ~/.openvpn-as/config:/config
+    ports:
+      - 943:943
+      - 9443:9443
+      - 1194:1194/udp
+    restart: unless-stopped
   plex:
     image: linuxserver/plex
     container_name: plex
     network_mode: host
     environment:
       - PUID=${PUID}
-      - PGID=${PUID}
+      - PGID=${PGID}
       - VERSION=docker
       - PLEX_CLAIM=${PLEX_CLAIM}
       - TZ=${TZ}
@@ -80,7 +97,7 @@ services:
     network_mode: host
     environment:
       - PUID=${PUID}
-      - PGID=${PUID}
+      - PGID=${PGID}
       - TZ=${TZ}
       - UMASK_SET=022 #optional
     volumes:
@@ -112,7 +129,7 @@ services:
     network_mode: host
     environment:
       - PUID=${PUID}
-      - PGID=${PUID}
+      - PGID=${PGID}
       - TZ=${TZ}
       - TRANSMISSION_WEB_HOME=/transmission-web-control/ #optional
       - TRANSMISSION_WATCH_DIR_FORCE_GENERIC=true
