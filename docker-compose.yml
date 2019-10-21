@@ -139,8 +139,8 @@ services:
       - ~/.transmission/watch:/watch
     ports:
       - 9091:9091
-      - ${TRANSMISSION_PORT}:51413
-      - ${TRANSMISSION_PORT}:51413/udp
+      - ${TRANSMISSION_PORT}:${TRANSMISSION_PORT}
+      - ${TRANSMISSION_PORT}:${TRANSMISSION_PORT}/udp
     restart: unless-stopped
 
 #networks:
