@@ -1,4 +1,4 @@
-version: "2"
+version: "3.7"
 services:
   bazarr:
     image: linuxserver/bazarr
@@ -71,16 +71,6 @@ services:
     ports:
       - 3579:3579
     restart: unless-stopped
-  openvpn:
-    image: giggio/openvpn-arm
-    container_name: openvpn
-    cap_add:
-      - NET_ADMIN
-    volumes:
-      - ~/.openvpn/config:/etc/openvpn
-    ports:
-      - ${OPENVPN_PORT}:1194/udp
-    restart: unless-stopped
   plex:
     image: linuxserver/plex
     container_name: plex
@@ -149,8 +139,8 @@ services:
       - ~/.transmission/watch:/watch
     ports:
       - 9091:9091
-      - ${TRANSMISSION_PORT}:51413
-      - ${TRANSMISSION_PORT}:51413/udp
+      - ${TRANSMISSION_PORT}:${TRANSMISSION_PORT}
+      - ${TRANSMISSION_PORT}:${TRANSMISSION_PORT}/udp
     restart: unless-stopped
 
 #networks:
