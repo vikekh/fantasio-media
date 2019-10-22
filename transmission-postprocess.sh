@@ -1,7 +1,10 @@
 #!/bin/sh -xu
 
 cd ${TR_TORRENT_DIR}/${TR_TORRENT_NAME}
-mkdir unrar
-cd unrar
-unrar e -r -o- ../*.rar
-unrar e -r -o- *.rar
+UNRAR_DIR=./unrar
+mkdir $UNRAR_DIR
+cd $UNRAR_DIR
+find .. -name *.rar -exec unrar e -o- {} \;
+find . -name *.rar -exec unrar e -o- {} \; -delete
+cd ..
+rmdir -r $UNRAR_DIR
