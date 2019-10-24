@@ -16,5 +16,5 @@ find .. -name *.rar -exec unrar e -o- {} \;
 find . -name *.rar -exec unrar e -o- {} \;
 find . -name *.rar -exec rm {} \;
 cd ..
-rmdir -r $UNRAR_DIR
+rmdir $UNRAR_DIR
 echo "End unrar"
