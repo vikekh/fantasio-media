@@ -1,0 +1,127 @@
+version: "3.7"
+
+services:
+  bazarr:
+    image: linuxserver/bazarr
+    env_file:
+      - media.env
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${BAZARR_DIR}/config:/config
+      - ${PLEX_MOVIES_DIR}:/movies
+      - ${PLEX_TV_DIR}:/tv
+    ports:
+      - 6767:6767
+    restart: unless-stopped
+
+  heimdall:
+    image: linuxserver/heimdall
+    env_file:
+      - media.env
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${HEIMDALL_DIR}/config:/config
+    ports:
+      - 80:80
+    restart: unless-stopped
+
+  jackett:
+    image: linuxserver/jackett
+    env_file:
+      - media.env
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${JACKETT_DIR}/config:/config
+    ports:
+      - 9117:9117
+    restart: unless-stopped
+    
+  ombi:
+    image: linuxserver/ombi
+    env_file:
+      - media.env
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${OMBI_DIR}/config:/config
+    ports:
+      - 3579:3579
+    restart: unless-stopped
+
+  plex:
+    image: linuxserver/plex
+    env_file:
+      - media.env
+    network_mode: host
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - PLEX_CLAIM=${PLEX_CLAIM}
+      - VERSION=docker
+    volumes:
+      - ${PLEX_DIR}/config:/config
+      - ${PLEX_MOVIES_DIR}:/movies
+      - ${PLEX_DIR}/transcode:/transcode
+      - ${PLEX_TV_DIR}:/tv
+    restart: unless-stopped
+
+  radarr:
+    image: linuxserver/radarr
+    env_file:
+      - media.env
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${PLEX_MOVIES_DIR}:/movies
+      - ${RADARR_DIR}/config:/config
+      - ${TRANSMISSION_DOWNLOADS_DIR}:/downloads
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+
+  sonarr:
+    image: linuxserver/sonarr:preview
+    env_file:
+      - media.env
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${SONARR_DIR}/config:/config
+      - ${TRANSMISSION_DOWNLOADS_DIR}:/downloads
+      - ${PLEX_TV_DIR}:/tv
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+  transmission:
+    image: linuxserver/transmission
+    env_file:
+      - media.env
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${TRANSMISSION_DIR}/config:/config
+      - ${TRANSMISSION_DOWNLOADS_DIR}:/downloads
+    ports:
+      - 9091:9091
+      - ${TRANSMISSION_PORT}:${TRANSMISSION_PORT}
+      - ${TRANSMISSION_PORT}:${TRANSMISSION_PORT}/udp
+    restart: unless-stopped
