@@ -11,7 +11,8 @@ services:
       - TZ=${TZ}
     volumes:
       - ${TRANSMISSION_DIR}/config:/config
-      - ${TRANSMISSION_DOWNLOADS_DIR}:/downloads
+      - ${TRANSMISSION_DOWNLOADS1_DIR}:/downloads1
+      - ${TRANSMISSION_DOWNLOADS2_DIR}:/downloads2
     ports:
       - 9092:9091
       - ${TRANSMISSION_PORT}:${TRANSMISSION_PORT}
