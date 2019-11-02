@@ -3,8 +3,6 @@ version: "3.7"
 services:
   bazarr:
     image: linuxserver/bazarr
-    env_file:
-      - media.env
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -19,8 +17,6 @@ services:
 
   heimdall:
     image: linuxserver/heimdall
-    env_file:
-      - media.env
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -33,8 +29,6 @@ services:
 
   jackett:
     image: linuxserver/jackett
-    env_file:
-      - media.env
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -47,8 +41,6 @@ services:
     
   ombi:
     image: linuxserver/ombi
-    env_file:
-      - media.env
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -61,8 +53,6 @@ services:
 
   plex:
     image: linuxserver/plex
-    env_file:
-      - media.env
     network_mode: host
     environment:
       - PUID=${PUID}
@@ -79,8 +69,6 @@ services:
 
   radarr:
     image: linuxserver/radarr
-    env_file:
-      - media.env
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -95,8 +83,6 @@ services:
 
   sonarr:
     image: linuxserver/sonarr:preview
-    env_file:
-      - media.env
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -111,8 +97,6 @@ services:
 
   transmission:
     image: linuxserver/transmission
-    env_file:
-      - media.env
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -122,6 +106,6 @@ services:
       - ${TRANSMISSION_DOWNLOADS_DIR}:/downloads
     ports:
       - 9091:9091
-      - ${TRANSMISSION_PORT}:${TRANSMISSION_PORT}
-      - ${TRANSMISSION_PORT}:${TRANSMISSION_PORT}/udp
+      - ${TRANSMISSION_PORT_1}:${TRANSMISSION_PORT_1}
+      - ${TRANSMISSION_PORT_1}:${TRANSMISSION_PORT_1}/udp
     restart: unless-stopped

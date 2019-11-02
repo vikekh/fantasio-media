@@ -5,8 +5,6 @@ services:
     image: giggio/openvpn-arm
     cap_add:
       - NET_ADMIN
-    env_file:
-      - vpn.env
     volumes:
       - ${OPENVPN_DIR}/config:/etc/openvpn
     ports:
