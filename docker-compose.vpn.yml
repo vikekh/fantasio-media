@@ -6,7 +6,7 @@ services:
     cap_add:
       - NET_ADMIN
     volumes:
-      - ${OPENVPN_DIR}/config:/etc/openvpn
+      - ${VPN_DATA_DIR}/openvpn/config:/etc/openvpn
     ports:
       - ${OPENVPN_PORT}:1194/udp
     restart: unless-stopped

@@ -8,7 +8,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${TRANSMISSION_DIR}/config:/config
+      - ${TORRENT_DATA_DIR}/transmission/config:/config
       - ${TRANSMISSION_DOWNLOADS_DIR}:/downloads
       - ${TRANSMISSION_DOWNLOADS_ALT_DIR}:/downloads-alt
     ports:
@@ -25,5 +25,5 @@ services:
         - UID=${PUID}
         - GID=${PGID}
     volumes:
-      - ${TRANSMISSION_RSS_DIR}/config/transmission-rss.conf:/etc/transmission-rss.conf
+      - ${TORRENT_DATA_DIR}/transmission-rss/config/transmission-rss.conf:/etc/transmission-rss.conf
     restart: unless-stopped
