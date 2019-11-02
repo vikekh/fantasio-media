@@ -8,13 +8,14 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${TORRENT_DATA_DIR}/transmission/config:/config
+      - ${DATA_DIR}/transmission/config:/config
       - ${TRANSMISSION_DOWNLOADS_DIR}:/downloads
       - ${TRANSMISSION_DOWNLOADS_ALT_DIR}:/downloads-alt
+      - TRANSMISSION_WEB_HOME=/transmission-web-control/
     ports:
       - 9092:9091
-      - ${TRANSMISSION_PORT_2}:${TRANSMISSION_PORT_2}
-      - ${TRANSMISSION_PORT_2}:${TRANSMISSION_PORT_2}/udp
+      - ${TRANSMISSION_PORT}:${TRANSMISSION_PORT}
+      - ${TRANSMISSION_PORT}:${TRANSMISSION_PORT}/udp
     restart: unless-stopped
 
   transmission-rss:
@@ -25,5 +26,5 @@ services:
         - UID=${PUID}
         - GID=${PGID}
     volumes:
-      - ${TORRENT_DATA_DIR}/transmission-rss/config/transmission-rss.conf:/etc/transmission-rss.conf
+      - ${DATA_DIR}/transmission-rss/config/transmission-rss.conf:/etc/transmission-rss.conf
     restart: unless-stopped
