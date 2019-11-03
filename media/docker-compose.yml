@@ -75,7 +75,7 @@ services:
       - TZ=${TZ}
     volumes:
       - ${DATA_DIR}/radarr/config:/config
-      - ${TRANSMISSION_DOWNLOADS_DIR}:/downloads
+      - ${DOWNLOADS_DIR}:/downloads
       - ${PLEX_MOVIES_DIR}:/movies
     ports:
       - 7878:7878
@@ -89,24 +89,8 @@ services:
       - TZ=${TZ}
     volumes:
       - ${DATA_DIR}/sonarr/config:/config
-      - ${TRANSMISSION_DOWNLOADS_DIR}:/downloads
+      - ${DOWNLOADS_DIR}:/downloads
       - ${PLEX_TV_DIR}:/tv
     ports:
       - 8989:8989
-    restart: unless-stopped
-
-  transmission:
-    image: linuxserver/transmission
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - TRANSMISSION_WEB_HOME=/transmission-web-control/
-    volumes:
-      - ${DATA_DIR}/transmission/config:/config
-      - ${TRANSMISSION_DOWNLOADS_DIR}:/downloads
-    ports:
-      - 9091:9091
-      - ${TRANSMISSION_PORT}:${TRANSMISSION_PORT}
-      - ${TRANSMISSION_PORT}:${TRANSMISSION_PORT}/udp
     restart: unless-stopped

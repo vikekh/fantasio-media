@@ -12,7 +12,7 @@ services:
       - ${DATA_DIR}/transmission/config:/config
       - ${TRANSMISSION_DOWNLOADS_DIR}:/downloads
     ports:
-      - 9091:9091
+      - 9092:9091
       - ${TRANSMISSION_PORT}:${TRANSMISSION_PORT}
       - ${TRANSMISSION_PORT}:${TRANSMISSION_PORT}/udp
     restart: unless-stopped
