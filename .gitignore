@@ -1,4 +1,4 @@
 .*
 !/.gitignore
 *.env
-torrent/transmission-rss
+transmission-rss

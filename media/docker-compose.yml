@@ -8,7 +8,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${DATA_DIR}/bazarr/config:/config
+      - ./.bazarr/config:/config
       - ${PLEX_MOVIES_DIR}:/movies
       - ${PLEX_TV_DIR}:/tv
     ports:
@@ -22,7 +22,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${DATA_DIR}/heimdall/config:/config
+      - ./.heimdall/config:/config
     ports:
       - 80:80
     restart: unless-stopped
@@ -34,7 +34,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${DATA_DIR}/jackett/config:/config
+      - ./.jackett/config:/config
     ports:
       - 9117:9117
     restart: unless-stopped
@@ -46,7 +46,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${DATA_DIR}/ombi/config:/config
+      - ./.ombi/config:/config
     ports:
       - 3579:3579
     restart: unless-stopped
@@ -61,9 +61,9 @@ services:
       - PLEX_CLAIM=${PLEX_CLAIM}
       - VERSION=docker
     volumes:
-      - ${DATA_DIR}/plex/config:/config
+      - ./.plex/config:/config
       - ${PLEX_MOVIES_DIR}:/movies
-      - ${DATA_DIR}/plex/transcode:/transcode
+      - ./.plex/transcode:/transcode
       - ${PLEX_TV_DIR}:/tv
     restart: unless-stopped
 
@@ -74,7 +74,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${DATA_DIR}/radarr/config:/config
+      - ./.radarr/config:/config
       - ${DOWNLOADS_DIR}:/downloads
       - ${PLEX_MOVIES_DIR}:/movies
     ports:
@@ -88,7 +88,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${DATA_DIR}/sonarr/config:/config
+      - ./.sonarr/config:/config
       - ${DOWNLOADS_DIR}:/downloads
       - ${PLEX_TV_DIR}:/tv
     ports:

@@ -9,7 +9,7 @@ services:
       - TZ=${TZ}
       - TRANSMISSION_WEB_HOME=/transmission-web-control/
     volumes:
-      - ${DATA_DIR}/transmission/config:/config
+      - ./.transmission/config:/config
       - ${TRANSMISSION_DOWNLOADS_DIR}:/downloads
     ports:
       - 9092:9091
@@ -25,5 +25,5 @@ services:
         - UID=${PUID}
         - GID=${PGID}
     volumes:
-      - ${DATA_DIR}/transmission-rss/config/transmission-rss.conf:/etc/transmission-rss.conf
+      - ./.transmission-rss/config/transmission-rss.conf:/etc/transmission-rss.conf
     restart: unless-stopped
