@@ -15,18 +15,6 @@ services:
       - 6767:6767
     restart: unless-stopped
 
-  heimdall:
-    image: linuxserver/heimdall
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-    volumes:
-      - ./.heimdall/config:/config
-    ports:
-      - 80:80
-    restart: unless-stopped
-
   jackett:
     image: linuxserver/jackett
     environment:
