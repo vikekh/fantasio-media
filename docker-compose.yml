@@ -52,6 +52,8 @@ services:
       - ${PLEX_MOVIES_DIR}:/movies
       - /dev/shm:/transcode
       - ${PLEX_TV_DIR}:/tv
+    devices:
+      - /dev/dri:/dev/dri
     restart: unless-stopped
 
   radarr:
