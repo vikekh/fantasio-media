@@ -40,18 +40,17 @@ services:
     restart: unless-stopped
 
   plex:
-    image: linuxserver/plex
+    image: plexinc/pms-docker:plexpass
     network_mode: host
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
+      - PLEX_UID=${PUID}
+      - PLEX_GID=${PGID}
       - TZ=${TZ}
       - PLEX_CLAIM=${PLEX_CLAIM}
-      - VERSION=docker
     volumes:
       - ./.plex/config:/config
       - ${PLEX_MOVIES_DIR}:/movies
-      - ./.plex/transcode:/transcode
+      - /dev/shm:/transcode
       - ${PLEX_TV_DIR}:/tv
     restart: unless-stopped
 
