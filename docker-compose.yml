@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   bazarr:
-    image: linuxserver/bazarr
+    image: linuxserver/bazarr:development
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -50,6 +50,7 @@ services:
     volumes:
       - ./.plex/config:/config
       - ${PLEX_MOVIES_DIR}:/movies
+      - ${PLEX_PREROLLS_DIR}:/prerolls
       - /dev/shm:/transcode
       - ${PLEX_TV_DIR}:/tv
     devices:
