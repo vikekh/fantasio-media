@@ -84,3 +84,16 @@ services:
     ports:
       - 8989:8989
     restart: unless-stopped
+
+  tautulli:
+    image: linuxserver/tautulli
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - .tautulli/config:/config
+      - .plex/config/Library/Application Support/Plex Media Server/Logs:/logs
+    ports:
+      - 8181:8181
+    restart: unless-stopped
