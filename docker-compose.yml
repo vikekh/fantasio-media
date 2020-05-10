@@ -33,8 +33,14 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
+      - VIRTUAL_HOST=${OMBI_HOST}
+      - VIRTUAL_PORT=3579
+      - LETSENCRYPT_HOST=${OMBI_HOST}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
     volumes:
       - ./.ombi/config:/config
+    networks:
+      - nginx-proxy
     ports:
       - 3579:3579
     restart: unless-stopped
@@ -97,3 +103,7 @@ services:
     ports:
       - 8181:8181
     restart: unless-stopped
+
+networks:
+  nginx-proxy:
+    external: true
