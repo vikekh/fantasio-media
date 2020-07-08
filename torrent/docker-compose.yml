@@ -1,0 +1,55 @@
+version: "3.7"
+
+services:
+  transmission:
+    image: haugene/transmission-openvpn
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - TRANSMISSION_WEB_UI=transmission-web-control
+      - TRANSMISSION_DOWNLOAD_DIR=/downloads/complete
+      - TRANSMISSION_INCOMPLETE_DIR=/downloads/incomplete
+      - TRANSMISSION_SCRIPT_TORRENT_DONE_ENABLED=true
+      - TRANSMISSION_SCRIPT_TORRENT_DONE_FILENAME=/data/transmission-home/unrar.sh
+      - TRANSMISSION_PEER_PORT=${TRANSMISSION_PEER_PORT}
+      - TRANSMISSION_DHT_ENABLED=false
+      - TRANSMISSION_PEX_ENABLED=false
+      - TRANSMISSION_LPD_ENABLED=false
+      - TRANSMISSION_SPEED_LIMIT_UP=${TRANSMISSION_SPEED_LIMIT_UP}
+      - TRANSMISSION_SPEED_LIMIT_UP_ENABLED=${TRANSMISSION_SPEED_LIMIT_UP_ENABLED}
+      - CREATE_TUN_DEVICE=true
+      - OPENVPN_PROVIDER=${OPENVPN_PROVIDER}
+      - OPENVPN_CONFIG=${OPENVPN_CONFIG}
+      - OPENVPN_USERNAME=${OPENVPN_USERNAME}
+      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
+      - WEBPROXY_ENABLED=false
+      - LOCAL_NETWORK=192.168.0.0/16
+    volumes:
+      - ./.transmission/config:/data/transmission-home
+      - ${DOWNLOADS_DIR}:/downloads
+      - /etc/localtime:/etc/localtime:ro
+      - ./${OPENVPN_CONFIG}.ovpn:/etc/openvpn/${OPENVPN_CONFIG_DIR}/${OPENVPN_CONFIG}.ovpn
+    ports:
+      - ${TRANSMISSION_WEB_PORT}:9091
+    cap_add:
+      - NET_ADMIN
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+    restart: unless-stopped
+
+  transmission-rss:
+    image: haugene/transmission-rss
+    links:
+      - transmission
+    environment:
+      - RSS_URL=${TRANSMISSION_RSS_URL}
+      - TRANSMISSION_DOWNLOAD_DIR=/downloads/complete
+    volumes:
+      - ./transmission-rss/transmission-rss.tmpl:/etc/transmission-rss/transmission-rss.tmpl
+    restart: unless-stopped
