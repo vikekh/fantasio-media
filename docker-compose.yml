@@ -3,6 +3,7 @@ version: "3.7"
 services:
   bazarr:
     image: linuxserver/bazarr:development
+    container_name: bazarr
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -17,6 +18,7 @@ services:
 
   jackett:
     image: linuxserver/jackett
+    container_name: jackett
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -29,24 +31,26 @@ services:
     
   ombi:
     image: linuxserver/ombi
+    container_name: ombi
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - VIRTUAL_HOST=${OMBI_HOST}
-      - VIRTUAL_PORT=3579
-      - LETSENCRYPT_HOST=${OMBI_HOST}
-      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+      #- VIRTUAL_HOST=${OMBI_HOST}
+      #- VIRTUAL_PORT=3579
+      #- LETSENCRYPT_HOST=${OMBI_HOST}
+      #- LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
     volumes:
       - ./.ombi/config:/config
-    networks:
-      - nginx-proxy
+    #networks:
+      #- nginx-proxy
     ports:
       - 3579:3579
     restart: unless-stopped
 
   plex:
     image: plexinc/pms-docker:plexpass
+    container_name: plex
     network_mode: host
     environment:
       - PLEX_UID=${PUID}
@@ -65,6 +69,7 @@ services:
 
   radarr:
     image: linuxserver/radarr
+    container_name: radarr
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -79,6 +84,7 @@ services:
 
   sonarr:
     image: linuxserver/sonarr:preview
+    container_name: sonarr
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -93,6 +99,7 @@ services:
 
   tautulli:
     image: linuxserver/tautulli
+    container_name: tautulli
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -104,6 +111,6 @@ services:
       - 8181:8181
     restart: unless-stopped
 
-networks:
-  nginx-proxy:
-    external: true
+#networks:
+  #nginx-proxy:
+    #external: true
