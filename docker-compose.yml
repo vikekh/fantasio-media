@@ -12,8 +12,8 @@ services:
       - ./.bazarr/config:/config
       - ${PLEX_MOVIES_DIR}:/movies
       - ${PLEX_TV_DIR}:/tv
-    ports:
-      - 6767:6767
+    expose:
+      - 6767
     restart: unless-stopped
 
   jackett:
@@ -25,8 +25,8 @@ services:
       - TZ=${TZ}
     volumes:
       - ./.jackett/config:/config
-    ports:
-      - 9117:9117
+    expose:
+      - 9117
     restart: unless-stopped
     
   ombi:
@@ -42,10 +42,8 @@ services:
       #- LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
     volumes:
       - ./.ombi/config:/config
-    #networks:
-      #- nginx-proxy
-    ports:
-      - 3579:3579
+    expose:
+      - 3579
     restart: unless-stopped
 
   plex:
@@ -78,8 +76,10 @@ services:
       - ./.radarr/config:/config
       - ${DOWNLOADS_DIR}:/downloads
       - ${PLEX_MOVIES_DIR}:/movies
-    ports:
-      - 7878:7878
+    expose:
+      - 7878
+    networks:
+      - torrent_default
     restart: unless-stopped
 
   sonarr:
@@ -93,8 +93,10 @@ services:
       - ./.sonarr/config:/config
       - ${DOWNLOADS_DIR}:/downloads
       - ${PLEX_TV_DIR}:/tv
-    ports:
-      - 8989:8989
+    expose:
+      - 8989
+    networks:
+      - torrent_default
     restart: unless-stopped
 
   tautulli:
@@ -107,10 +109,10 @@ services:
     volumes:
       - .tautulli/config:/config
       - .plex/config/Library/Application Support/Plex Media Server/Logs:/logs
-    ports:
-      - 8181:8181
+    expose:
+      - 8181
     restart: unless-stopped
 
-#networks:
-  #nginx-proxy:
-    #external: true
+networks:
+  torrent_default:
+    external: true
