@@ -3,6 +3,7 @@ version: "3.7"
 services:
   duplicati:
     image: duplicati/duplicati
+    container_name: duplicati
     volumes:
       - /:/source
       - /media/fantasio/backup:/destination

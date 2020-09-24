@@ -3,6 +3,7 @@ version: "3.7"
 services:
   transmission-viktor:
     image: haugene/transmission-openvpn
+    container_name: transmission-viktor
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -48,6 +49,7 @@ services:
 
   transmission-rss-viktor:
     image: haugene/transmission-rss
+    container_name: transmission-rss-viktor
     links:
       - transmission-viktor
     environment:
