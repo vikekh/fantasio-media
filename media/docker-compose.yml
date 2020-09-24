@@ -13,6 +13,9 @@ services:
       - ${PLEX_TV_DIR}:/tv
     expose:
       - 6767
+    networks:
+      - media
+      - reverse-proxy
     restart: unless-stopped
 
   jackett:
@@ -25,6 +28,9 @@ services:
       - ./.jackett/config:/config
     expose:
       - 9117
+    networks:
+      - media
+      - reverse-proxy
     restart: unless-stopped
     
   ombi:
@@ -37,6 +43,9 @@ services:
       - ./.ombi/config:/config
     expose:
       - 3579
+    networks:
+      - media
+      - reverse-proxy
     restart: unless-stopped
 
   plex:
@@ -70,7 +79,9 @@ services:
     expose:
       - 7878
     networks:
-      - torrent_default
+      - media
+      - reverse-proxy
+      - torrent
     restart: unless-stopped
 
   sonarr:
@@ -86,7 +97,9 @@ services:
     expose:
       - 8989
     networks:
-      - torrent_default
+      - media
+      - reverse-proxy
+      - torrent
     restart: unless-stopped
 
   tautulli:
@@ -100,8 +113,16 @@ services:
       - .plex/config/Library/Application Support/Plex Media Server/Logs:/logs
     expose:
       - 8181
+    networks:
+      - media
+      - reverse-proxy
+      - torrent
     restart: unless-stopped
 
 networks:
-  torrent_default:
+  media:
+    external: true
+  reverse-proxy:
+    external: true
+  torrent:
     external: true
