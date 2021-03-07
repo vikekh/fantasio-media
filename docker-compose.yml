@@ -51,6 +51,25 @@ services:
       - reverse-proxy
     restart: unless-stopped
 
+  overseerr:
+    image: sctx/overseerr:latest
+    container_name: overseerr
+    environment:
+      - PLEX_UID=${PUID}
+      - PLEX_GID=${PGID}
+      - TZ=${TZ}
+      - LOG_LEVEL=info
+    ports:
+      - 5055:5055
+    expose:
+      - 5055
+    volumes:
+      - overseerr-data:/app/config:rw
+    networks:
+      - media
+      - reverse-proxy
+    restart: unless-stopped
+
   plex:
     image: plexinc/pms-docker:plexpass
     container_name: plex
@@ -125,6 +144,10 @@ services:
       - reverse-proxy
       - torrent
     restart: unless-stopped
+
+volumes:
+  overseerr-data:
+    external: true
 
 networks:
   media:
