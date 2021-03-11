@@ -59,8 +59,6 @@ services:
       - PLEX_GID=${PGID}
       - TZ=${TZ}
       - LOG_LEVEL=info
-    ports:
-      - 5055:5055
     expose:
       - 5055
     volumes:
