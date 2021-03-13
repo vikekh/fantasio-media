@@ -9,7 +9,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ./.bazarr/config:/config
+      - bazarr-config:/config
       - ${PLEX_MOVIES_DIR}:/movies
       - ${PLEX_TV_DIR}:/tv
     expose:
@@ -27,25 +27,9 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ./.jackett/config:/config
+      - jackett-config:/config
     expose:
       - 9117
-    networks:
-      - media
-      - reverse-proxy
-    restart: unless-stopped
-    
-  ombi:
-    image: linuxserver/ombi:v4-preview
-    container_name: ombi
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-    volumes:
-      - ./.ombi/config:/config
-    expose:
-      - 3579
     networks:
       - media
       - reverse-proxy
@@ -62,7 +46,7 @@ services:
     expose:
       - 5055
     volumes:
-      - overseerr-data:/app/config:rw
+      - overseerr-config:/app/config:rw
     networks:
       - media
       - reverse-proxy
@@ -78,7 +62,7 @@ services:
       - TZ=${TZ}
       - PLEX_CLAIM=${PLEX_CLAIM}
     volumes:
-      - ./.plex/config:/config
+      - plex-config:/config
       - ${PLEX_MOVIES_DIR}:/movies
       - ${PLEX_PREROLLS_DIR}:/prerolls
       - /dev/shm:/transcode
@@ -95,7 +79,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ./.radarr/config:/config
+      - radarr-config:/config
       - ${DOWNLOADS_DIR}:/downloads
       - ${PLEX_MOVIES_DIR}:/movies
     expose:
@@ -114,7 +98,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ./.sonarr/config:/config
+      - sonarr-config:/config
       - ${DOWNLOADS_DIR}:/downloads
       - ${PLEX_TV_DIR}:/tv
     expose:
@@ -133,8 +117,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - .tautulli/config:/config
-      - .plex/config/Library/Application Support/Plex Media Server/Logs:/logs
+      - tautulli-config:/config
     expose:
       - 8181
     networks:
@@ -144,12 +127,24 @@ services:
     restart: unless-stopped
 
 volumes:
-  overseerr-data:
-    external: true
+  bazarr-config:
+    name: bazarr-config
+  jackett-config:
+    name: jackett-config
+  plex-config:
+    name: plex-config
+  radarr-config:
+    name: radarr-config
+  sonarr-config:
+    name: sonarr-config
+  overseerr-config:
+    name: overseerr-config
+  tautulli-config:
+    name: tautulli-config
 
 networks:
   media:
-    external: true
+    name: media
   reverse-proxy:
     external: true
   torrent:
