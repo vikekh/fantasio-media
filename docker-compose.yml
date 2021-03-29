@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   bazarr:
-    image: linuxserver/bazarr:development
+    image: linuxserver/bazarr:amd64-latest
     container_name: bazarr
     environment:
       - PUID=${PUID}
@@ -20,7 +20,7 @@ services:
     restart: unless-stopped
 
   jackett:
-    image: linuxserver/jackett
+    image: linuxserver/jackett:amd64-latest
     container_name: jackett
     environment:
       - PUID=${PUID}
@@ -72,7 +72,7 @@ services:
     restart: unless-stopped
 
   radarr:
-    image: linuxserver/radarr
+    image: linuxserver/radarr:amd64-latest
     container_name: radarr
     environment:
       - PUID=${PUID}
@@ -91,7 +91,7 @@ services:
     restart: unless-stopped
 
   sonarr:
-    image: linuxserver/sonarr:preview
+    image: linuxserver/sonarr:amd64-latest
     container_name: sonarr
     environment:
       - PUID=${PUID}
@@ -110,7 +110,7 @@ services:
     restart: unless-stopped
 
   tautulli:
-    image: linuxserver/tautulli
+    image: linuxserver/tautulli:amd64-latest
     container_name: tautulli
     environment:
       - PUID=${PUID}
