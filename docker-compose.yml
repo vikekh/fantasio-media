@@ -64,15 +64,17 @@ services:
     volumes:
       - plex-config:/config
       - ${PLEX_MOVIES_DIR}:/movies
+      - ${PLEX_MOVIES_4K_DIR}:/movies-4k
       - ${PLEX_PREROLLS_DIR}:/prerolls
       - /dev/shm:/transcode
       - ${PLEX_TV_DIR}:/tv
+      - ${PLEX_TV_4K_DIR}:/tv-4k
     devices:
       - /dev/dri:/dev/dri
     restart: unless-stopped
 
   radarr:
-    image: linuxserver/radarr:amd64-latest
+    image: linuxserver/radarr:amd64-nightly-4.1.0.6176-ls280
     container_name: radarr
     environment:
       - PUID=${PUID}
@@ -90,8 +92,27 @@ services:
       - torrent
     restart: unless-stopped
 
+  radarr-4k:
+    image: linuxserver/radarr:amd64-nightly-4.1.0.6176-ls280
+    container_name: radarr-4k
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - radarr-4k-config:/config
+      - ${DOWNLOADS_DIR}:/downloads
+      - ${PLEX_MOVIES_4K_DIR}:/movies
+    expose:
+      - 7878
+    networks:
+      - media
+      - reverse-proxy
+      - torrent
+    restart: unless-stopped
+
   sonarr:
-    image: linuxserver/sonarr:amd64-latest
+    image: linuxserver/sonarr:latest
     container_name: sonarr
     environment:
       - PUID=${PUID}
@@ -101,6 +122,25 @@ services:
       - sonarr-config:/config
       - ${DOWNLOADS_DIR}:/downloads
       - ${PLEX_TV_DIR}:/tv
+    expose:
+      - 8989
+    networks:
+      - media
+      - reverse-proxy
+      - torrent
+    restart: unless-stopped
+
+  sonarr-4k:
+    image: linuxserver/sonarr:latest
+    container_name: sonarr-4k
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - sonarr-4k-config:/config
+      - ${DOWNLOADS_DIR}:/downloads
+      - ${PLEX_TV_4K_DIR}:/tv
     expose:
       - 8989
     networks:
@@ -135,8 +175,12 @@ volumes:
     name: plex-config
   radarr-config:
     name: radarr-config
+  radarr-4k-config:
+    name: radarr-4k-config
   sonarr-config:
     name: sonarr-config
+  sonarr-4k-config:
+    name: sonarr-4k-config
   overseerr-config:
     name: overseerr-config
   tautulli-config:
