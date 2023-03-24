@@ -16,7 +16,20 @@ services:
       - 6767
     networks:
       - media
-      - reverse-proxy
+    restart: unless-stopped
+
+  caddy:
+    image: caddy
+    container_name: caddy
+    volumes:
+      - ./.caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy-config:/config
+      - caddy-data:/data
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - media
     restart: unless-stopped
 
   jackett:
@@ -32,7 +45,6 @@ services:
       - 9117
     networks:
       - media
-      - reverse-proxy
     restart: unless-stopped
 
   overseerr:
@@ -49,7 +61,6 @@ services:
       - overseerr-config:/app/config:rw
     networks:
       - media
-      - reverse-proxy
     restart: unless-stopped
 
   plex:
@@ -85,7 +96,7 @@ services:
       - 8000
       - 9000
     networks:
-      - reverse-proxy
+      - media
     restart: unless-stopped
 
   radarr:
@@ -103,7 +114,6 @@ services:
       - 7878
     networks:
       - media
-      - reverse-proxy
     restart: unless-stopped
 
   radarr-4k:
@@ -121,7 +131,6 @@ services:
       - 7878
     networks:
       - media
-      - reverse-proxy
     restart: unless-stopped
 
   sonarr:
@@ -139,7 +148,6 @@ services:
       - 8989
     networks:
       - media
-      - reverse-proxy
     restart: unless-stopped
 
   sonarr-4k:
@@ -157,7 +165,6 @@ services:
       - 8989
     networks:
       - media
-      - reverse-proxy
     restart: unless-stopped
 
   tautulli:
@@ -173,7 +180,6 @@ services:
       - 8181
     networks:
       - media
-      - reverse-proxy
     restart: unless-stopped
 
   transmission:
@@ -220,12 +226,16 @@ services:
       options:
         max-size: 10m
     networks:
-      - reverse-proxy
+      - media
     restart: unless-stopped
 
 volumes:
   bazarr-config:
     name: bazarr-config
+  caddy-config:
+    name: caddy-config
+  caddy-data:
+    name: caddy-data
   jackett-config:
     name: jackett-config
   plex-config:
@@ -252,5 +262,3 @@ volumes:
 networks:
   media:
     name: media
-  reverse-proxy:
-    external: true

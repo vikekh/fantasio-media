@@ -14,6 +14,7 @@ mkdir $BACKUP_DIR
 # rm -r "${BACKUP_DIR}"/*
 
 docker stop bazarr
+docker stop caddy
 docker stop jackett
 docker stop overseerr
 docker stop plex
@@ -24,6 +25,8 @@ docker stop tautulli
 docker stop transmission
 
 docker run --rm -v bazarr-config:/data -v $BACKUP_DIR:/backup ubuntu tar cvf /backup/bazarr-config.tar /data
+docker run --rm -v caddy-config:/data -v $BACKUP_DIR:/backup ubuntu tar cvf /backup/caddy-config.tar /data
+docker run --rm -v caddy-data:/data -v $BACKUP_DIR:/backup ubuntu tar cvf /backup/caddy-data.tar /data
 docker run --rm -v jackett-config:/data -v $BACKUP_DIR:/backup ubuntu tar cvf /backup/jackett-config.tar /data
 docker run --rm -v overseerr-config:/data -v $BACKUP_DIR:/backup ubuntu tar cvf /backup/overseerr-config.tar /data
 docker run --rm -v plex-config:/data -v $BACKUP_DIR:/backup ubuntu tar cvf /backup/plex-config.tar /data
@@ -35,6 +38,7 @@ docker run --rm -v transmission-config:/data -v $BACKUP_DIR:/backup ubuntu tar c
 docker run --rm -v transmission-data:/data -v $BACKUP_DIR:/backup ubuntu tar cvf /backup/transmission-data.tar /data
 
 docker start bazarr
+docker start caddy
 docker start jackett
 docker start overseerr
 docker start plex
