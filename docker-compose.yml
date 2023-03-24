@@ -73,6 +73,21 @@ services:
       - /dev/dri:/dev/dri
     restart: unless-stopped
 
+  portainer:
+    image: portainer/portainer
+    container_name: portainer
+    command: -H unix:///var/run/docker.sock
+    volumes:
+      - portainer-data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime
+    expose:
+      - 8000
+      - 9000
+    networks:
+      - reverse-proxy
+    restart: unless-stopped
+
   radarr:
     image: linuxserver/radarr:amd64-nightly-4.1.0.6176-ls280
     container_name: radarr
@@ -173,6 +188,8 @@ volumes:
     name: jackett-config
   plex-config:
     name: plex-config
+  portainer-data:
+    name: portainer-data
   radarr-config:
     name: radarr-config
   radarr-4k-config:
