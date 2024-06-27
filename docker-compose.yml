@@ -16,20 +16,7 @@ services:
       - 6767
     networks:
       - media
-    restart: unless-stopped
-
-  caddy:
-    image: caddy
-    container_name: caddy
-    volumes:
-      - ./.caddy/Caddyfile:/etc/caddy/Caddyfile
-      - caddy-config:/config
-      - caddy-data:/data
-    ports:
-      - 80:80
-      - 443:443
-    networks:
-      - media
+      - reverse-proxy
     restart: unless-stopped
 
   jackett:
@@ -45,23 +32,25 @@ services:
       - 9117
     networks:
       - media
+      - reverse-proxy
     restart: unless-stopped
 
-  overseerr:
-    image: sctx/overseerr:latest
-    container_name: overseerr
-    environment:
-      - PLEX_UID=${PUID}
-      - PLEX_GID=${PGID}
-      - TZ=${TZ}
-      - LOG_LEVEL=info
-    expose:
-      - 5055
-    volumes:
-      - overseerr-config:/app/config:rw
-    networks:
-      - media
-    restart: unless-stopped
+  # overseerr:
+  #   image: sctx/overseerr:latest
+  #   container_name: overseerr
+  #   environment:
+  #     - PLEX_UID=${PUID}
+  #     - PLEX_GID=${PGID}
+  #     - TZ=${TZ}
+  #     - LOG_LEVEL=info
+  #   expose:
+  #     - 5055
+  #   volumes:
+  #     - overseerr-config:/app/config:rw
+  #   networks:
+  #     - media
+  #     - reverse-proxy
+  #   restart: unless-stopped
 
   plex:
     image: plexinc/pms-docker:plexpass
@@ -84,23 +73,8 @@ services:
       - /dev/dri:/dev/dri
     restart: unless-stopped
 
-  portainer:
-    image: portainer/portainer
-    container_name: portainer
-    command: -H unix:///var/run/docker.sock
-    volumes:
-      - portainer-data:/data
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /etc/localtime:/etc/localtime
-    expose:
-      - 8000
-      - 9000
-    networks:
-      - media
-    restart: unless-stopped
-
   radarr:
-    image: linuxserver/radarr:amd64-nightly-4.1.0.6176-ls280
+    image: linuxserver/radarr:amd64-latest
     container_name: radarr
     environment:
       - PUID=${PUID}
@@ -114,24 +88,26 @@ services:
       - 7878
     networks:
       - media
+      - reverse-proxy
     restart: unless-stopped
 
-  radarr-4k:
-    image: linuxserver/radarr:amd64-nightly-4.1.0.6176-ls280
-    container_name: radarr-4k
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-    volumes:
-      - radarr-4k-config:/config
-      - ${DOWNLOADS_DIR}:/downloads
-      - ${PLEX_MOVIES_4K_DIR}:/movies
-    expose:
-      - 7878
-    networks:
-      - media
-    restart: unless-stopped
+  # radarr-4k:
+  #   image: linuxserver/radarr:amd64-latest
+  #   container_name: radarr-4k
+  #   environment:
+  #     - PUID=${PUID}
+  #     - PGID=${PGID}
+  #     - TZ=${TZ}
+  #   volumes:
+  #     - radarr-4k-config:/config
+  #     - ${DOWNLOADS_DIR}:/downloads
+  #     - ${PLEX_MOVIES_4K_DIR}:/movies
+  #   expose:
+  #     - 7878
+  #   networks:
+  #     - media
+  #     - reverse-proxy
+  #   restart: unless-stopped
 
   sonarr:
     image: linuxserver/sonarr:latest
@@ -148,6 +124,7 @@ services:
       - 8989
     networks:
       - media
+      - reverse-proxy
     restart: unless-stopped
 
   sonarr-4k:
@@ -165,6 +142,7 @@ services:
       - 8989
     networks:
       - media
+      - reverse-proxy
     restart: unless-stopped
 
   tautulli:
@@ -180,10 +158,64 @@ services:
       - 8181
     networks:
       - media
+      - reverse-proxy
     restart: unless-stopped
 
+  # transmission:
+  #   image: haugene/transmission-openvpn:3.7.1
+  #   container_name: ${TRANSMISSION_CONTAINER_NAME}
+  #   environment:
+  #     - PUID=${PUID}
+  #     - PGID=${PGID}
+  #     - TZ=${TZ}
+  #     - TRANSMISSION_WEB_UI=transmission-web-control
+  #     - TRANSMISSION_DOWNLOAD_DIR=/downloads/complete
+  #     - TRANSMISSION_INCOMPLETE_DIR=/downloads/incomplete
+  #     - TRANSMISSION_SCRIPT_TORRENT_DONE_ENABLED=true
+  #     - TRANSMISSION_SCRIPT_TORRENT_DONE_FILENAME=/data/transmission-home/unrar.sh
+  #     - TRANSMISSION_PEER_PORT=${TRANSMISSION_PEER_PORT}
+  #     - TRANSMISSION_DHT_ENABLED=false
+  #     - TRANSMISSION_PEX_ENABLED=false
+  #     - TRANSMISSION_LPD_ENABLED=false
+  #     - TRANSMISSION_SPEED_LIMIT_UP=${TRANSMISSION_SPEED_LIMIT_UP}
+  #     - TRANSMISSION_SPEED_LIMIT_UP_ENABLED=${TRANSMISSION_SPEED_LIMIT_UP_ENABLED}
+  #     - CREATE_TUN_DEVICE=true
+  #     - OPENVPN_PROVIDER=${OPENVPN_PROVIDER}
+  #     - OPENVPN_CONFIG=${OPENVPN_CONFIG}
+  #     - OPENVPN_USERNAME=${OPENVPN_USERNAME}
+  #     - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
+  #     - WEBPROXY_ENABLED=false
+  #     - LOCAL_NETWORK=192.168.0.0/16
+  #   volumes:
+  #     - transmission-config:/config
+  #     - transmission-data:/data
+  #     - ${TRANSMISSION_UNRAR_SCRIPT}:/data/transmission-home/unrar.sh
+  #     - ${DOWNLOADS_DIR}:/downloads
+  #     - /etc/localtime:/etc/localtime:ro
+  #     - ./.transmission/${OPENVPN_CONFIG}.ovpn:/etc/openvpn/${OPENVPN_CONFIG_DIR}/${OPENVPN_CONFIG}.ovpn
+  #     # - ./.transmission/${OPENVPN_CONFIG}.ovpn:/etc/openvpn/${OPENVPN_CONFIG_DIR}/${OPENVPN_CONFIG}.ovpn
+  #   security_opt:
+  #     - seccomp:unconfined
+  #   expose:
+  #     - 9091
+  #   # ports:
+  #   #   - 9091:9091
+  #   cap_add:
+  #     - NET_ADMIN
+  #   dns:
+  #     - 8.8.8.8
+  #     - 8.8.4.4
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 10m
+  #   networks:
+  #     - media
+  #     - reverse-proxy
+  #   restart: unless-stopped
+
   transmission:
-    image: haugene/transmission-openvpn:3.7.1
+    image: haugene/transmission-openvpn:latest
     container_name: ${TRANSMISSION_CONTAINER_NAME}
     environment:
       - PUID=${PUID}
@@ -201,8 +233,12 @@ services:
       - TRANSMISSION_SPEED_LIMIT_UP=${TRANSMISSION_SPEED_LIMIT_UP}
       - TRANSMISSION_SPEED_LIMIT_UP_ENABLED=${TRANSMISSION_SPEED_LIMIT_UP_ENABLED}
       - CREATE_TUN_DEVICE=true
-      - OPENVPN_PROVIDER=${OPENVPN_PROVIDER}
-      - OPENVPN_CONFIG=${OPENVPN_CONFIG}
+      - OPENVPN_PROVIDER=ovpn
+      # - OPENVPN_CONFIG=${OPENVPN_CONFIG}
+      - OVPN_PROTOCOL=udp
+      - OVPN_COUNTRY=se
+      - OVPN_CITY=any-city
+      - OVPN_CONNECTION=standard
       - OPENVPN_USERNAME=${OPENVPN_USERNAME}
       - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
       - WEBPROXY_ENABLED=false
@@ -213,9 +249,14 @@ services:
       - ${TRANSMISSION_UNRAR_SCRIPT}:/data/transmission-home/unrar.sh
       - ${DOWNLOADS_DIR}:/downloads
       - /etc/localtime:/etc/localtime:ro
-      - ./.transmission/${OPENVPN_CONFIG}.ovpn:/etc/openvpn/${OPENVPN_CONFIG_DIR}/${OPENVPN_CONFIG}.ovpn
+      # - ./.transmission/${OPENVPN_CONFIG}.ovpn:/etc/openvpn/${OPENVPN_CONFIG_DIR}/${OPENVPN_CONFIG}.ovpn
+      # - ./.transmission/${OPENVPN_CONFIG}.ovpn:/etc/openvpn/${OPENVPN_CONFIG_DIR}/${OPENVPN_CONFIG}.ovpn
     expose:
       - 9091
+    sysctls:
+      - "net.ipv6.conf.all.disable_ipv6=0"
+    # ports:
+    #   - 9091:9091
     cap_add:
       - NET_ADMIN
     dns:
@@ -227,6 +268,7 @@ services:
         max-size: 10m
     networks:
       - media
+      - reverse-proxy
     restart: unless-stopped
 
 volumes:
@@ -258,7 +300,15 @@ volumes:
     name: transmission-config
   transmission-data:
     name: transmission-data
+  transmission-config-2:
+    name: transmission-config-2
+  transmission-data-2:
+    name: transmission-data-2
 
 networks:
   media:
     name: media
+  reverse-proxy:
+    external: true
+  utils:
+    external: true
