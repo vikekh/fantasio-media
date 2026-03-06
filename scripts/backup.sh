@@ -23,6 +23,7 @@ docker stop sonarr
 docker stop sonarr-4k
 docker stop tautulli
 docker stop transmission
+#docker rm transmission
 
 docker run --rm -v bazarr-config:/data -v $BACKUP_DIR:/backup ubuntu tar cvf /backup/bazarr-config.tar /data
 docker run --rm -v jackett-config:/data -v $BACKUP_DIR:/backup ubuntu tar cvf /backup/jackett-config.tar /data
